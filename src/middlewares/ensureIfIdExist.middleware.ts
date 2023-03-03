@@ -8,7 +8,7 @@ const ensureIfIdExist = async (request: Request, response: Response, next: NextF
 
     const id = parseInt(request.params.id)
 
-    const checkIfIdExist = await moviesRepo.exist( {where: { id: id }})
+    const checkIfIdExist = await moviesRepo.findOne( {where: { id: id }})
 
     if (!checkIfIdExist) {
         throw new AppError("Movie not found", 404)
