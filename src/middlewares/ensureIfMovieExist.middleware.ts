@@ -12,7 +12,7 @@ const ensureIfMovieExist = async (request: Request, response: Response, next: Ne
         return next()
     }
 
-    const checkIfMovieExist = await moviesRepo.exist( {where: { name: movieName }})
+    const checkIfMovieExist = await moviesRepo.findOne( {where: { name: movieName }})
 
     if (checkIfMovieExist) {
         throw new AppError("Movie already exists.", 409)

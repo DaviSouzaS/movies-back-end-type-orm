@@ -5,18 +5,26 @@ import { Movie } from "../entities"
 const readMovieService = async (payload: any): Promise<iMoviesPagination> => {
     const moviesRepo = AppDataSource.getRepository(Movie)
 
-    const sort: string = payload.sort || "id"
+    let sort: string = payload.sort || "id" 
 
-    const order: string = payload.order || "asc"
+    let order: string = payload.order || "asc"
+
+    if (sort === "id") {
+        order = "asc"
+    }
 
     let page: number = Number(payload.page) || 1
     let perPage: number = Number(payload.perPage) || 5
 
-    if (page < 0 && Number.isInteger(page)) {
+    if (perPage > 5) {
+        perPage = 5
+    }
+
+    if (page <= 0 || !Number.isInteger(page)) {
         page = 1
     }
 
-    if (perPage < 0 && Number.isInteger(perPage)) {
+    if (perPage <= 0 || !Number.isInteger(perPage)) {
         perPage = 5
     }
 
@@ -25,6 +33,8 @@ const readMovieService = async (payload: any): Promise<iMoviesPagination> => {
         skip: perPage * (page - 1),
         order: {[sort]: order}  
     })
+
+    const allMovies: Movie[] = await moviesRepo.find()
 
     const lastPage = page - 1
 
@@ -37,7 +47,7 @@ const readMovieService = async (payload: any): Promise<iMoviesPagination> => {
     const moviesPagination = {
         prevPage: previousPage,
         nextPage: nextPage,
-        count: movies.length,
+        count: allMovies.length, 
         data: movies
     }
 
