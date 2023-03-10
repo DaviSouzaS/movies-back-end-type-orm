@@ -4,9 +4,9 @@ import { iMovieCreate } from "../interfaces"
 
 const createMoviesController = async (request: Request, response: Response): Promise<Response> => {
 
-  const users: iMovieCreate = await createMovieService(request.body)
+  const movies: iMovieCreate = await createMovieService(request.body)
 
-  return response.status(201).json(users)
+  return response.status(201).json(movies)
 }
 
 export { createMoviesController }
